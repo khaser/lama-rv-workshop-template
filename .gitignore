@@ -1,0 +1,4 @@
+.devcontainer/**/*
+.direnv/**/*
+.envrc
+comp-build/**/*

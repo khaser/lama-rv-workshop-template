@@ -1,0 +1,9 @@
+*.html
+*.sm
+/*.log
+*.i
+*.s
+*.S
+*.bc
+*.elf
+*.output
