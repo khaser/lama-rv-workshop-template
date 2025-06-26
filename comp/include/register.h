@@ -7,13 +7,13 @@ namespace lama::rv {
         size_t regno;
         public:
 
-        static Register temp1() {return {3};}
-        static Register temp2() {return {4};}
+        static Register temp1() {return {30};}
+        static Register temp2() {return {31};}
         static Register base() {return {8};}
         static Register arg(size_t argno) {return{(size_t) (10 + argno)};}
 
         const char* to_string() {
-            constexpr static char *reg_names[] = {
+            constexpr static const char *reg_names[] = {
                 "zero",
                 "ra",
                 "sp",
