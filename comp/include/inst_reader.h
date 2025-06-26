@@ -5,10 +5,7 @@
 #include "opcode.h"
 #include "instructions.h"
 
-#include <cstddef>
 #include <memory>
-#include <optional>
-#include <vector>
 
 namespace lama {
 
@@ -60,20 +57,8 @@ public:
             return std::make_unique<Const>(read_int());
         }
 
-        case Opcode_String: {
-            return std::make_unique<String>(read_string());
-        }
-
-        case Opcode_SExp: {
-            return std::make_unique<SExpression>(read_string(), read_int());
-        }
-
         case Opcode_StI: {
             return std::make_unique<StoreStack>();
-        }
-
-        case Opcode_StA: {
-            return std::make_unique<StoreArray>();
         }
 
         case Opcode_Jmp: {
@@ -96,14 +81,6 @@ public:
             return std::make_unique<Duplicate>();
         }
 
-        case Opcode_Swap: {
-            return std::make_unique<Swap>();
-        }
-
-        case Opcode_Elem: {
-            return std::make_unique<Elem>();
-        }
-
         case Opcode_CJmpZ: {
             return std::make_unique<ConditionalJump>(read_int(), true);
         }
@@ -117,41 +94,8 @@ public:
             break;
         }
 
-        case Opcode_CBegin: {
-            return std::make_unique<Begin>(read_int(), read_int());
-            break;
-        }
-
-        case Opcode_Closure: {
-            int entry = read_int();
-            std::vector<LocationEntry> captured;
-            {
-                int n = read_int();
-                for (int i = 0; i < n; i++) {
-                    captured.push_back(read_loc());
-                }
-            }
-            return std::make_unique<Closure>(entry, std::move(captured));
-        }
-
-        case Opcode_CallC: {
-            return std::make_unique<CallClosure>(read_int());
-        }
-
         case Opcode_Call: {
             return std::make_unique<Call>(read_int(), read_int());
-        }
-
-        case Opcode_Tag: {
-            return std::make_unique<Tag>(read_string(), read_int());
-        }
-
-        case Opcode_Array: {
-            return std::make_unique<Array>(read_int());
-        }
-
-        case Opcode_Fail: {
-            return std::make_unique<Fail>(read_int(), read_int());
         }
 
         case Opcode_Line: {
@@ -166,17 +110,11 @@ public:
             }
 
             case HOpcode_Ld: {
-                return std::make_unique<Load>(read_int(), l);
-            }
-            case HOpcode_LdA: {
-                return std::make_unique<LoadArray>(read_int(), l);
-            }
-            case HOpcode_St: {
-                return std::make_unique<Store>(LocationEntry{(Location) read_int(), l});
+                return std::make_unique<Load>(LocationEntry{(Location) l, read_int()});
             }
 
-            case HOpcode_Patt: {
-                return std::make_unique<PatternInst>(l);
+            case HOpcode_St: {
+                return std::make_unique<Store>(LocationEntry{(Location) l, read_int()});
             }
 
             case HOpcode_LCall: {
@@ -186,15 +124,6 @@ public:
                 }
                 case LCall_Lwrite: {
                     return std::make_unique<BuiltinWrite>();
-                }
-                case LCall_Llength: {
-                    return std::make_unique<BuiltinLength>();
-                }
-                case LCall_Lstring: {
-                    return std::make_unique<BuiltinString>();
-                }
-                case LCall_Barray: {
-                    return std::make_unique<BuiltinArray>();
                 }
                 default:
                     FAIL(1, "Unknown LCall");

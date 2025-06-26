@@ -8,36 +8,21 @@ namespace lama {
 
 #define INSTRUCTIONS(MACRO) \
     MACRO(Const)            \
-    MACRO(String)           \
-    MACRO(SExpression)      \
     MACRO(StoreStack)       \
-    MACRO(StoreArray)       \
     MACRO(Jump)             \
     MACRO(ConditionalJump)  \
     MACRO(Return)           \
     MACRO(Drop)             \
     MACRO(Duplicate)        \
-    MACRO(Swap)             \
-    MACRO(Elem)             \
-    MACRO(Closure)          \
     MACRO(Begin)            \
     MACRO(End)              \
-    MACRO(CallClosure)      \
     MACRO(Call)             \
-    MACRO(Tag)              \
-    MACRO(Array)            \
-    MACRO(Fail)             \
     MACRO(Line)             \
     MACRO(Binop)            \
     MACRO(Load)             \
-    MACRO(LoadArray)        \
     MACRO(Store)            \
-    MACRO(PatternInst)      \
     MACRO(BuiltinRead)      \
-    MACRO(BuiltinWrite)     \
-    MACRO(BuiltinLength)    \
-    MACRO(BuiltinString)    \
-    MACRO(BuiltinArray)
+    MACRO(BuiltinWrite)
 
 
 #define BASE(class_name, super_class_name)       \
@@ -147,10 +132,9 @@ public:
 
 LEAF(Load, Instruction)
 private:
-    size_t _index;
-    Location _loc;
+    LocationEntry _loc;
 public:
-    Load(int index, int location) : _index(index), _loc((Location)location) {}
+    Load(LocationEntry loc) : _loc(loc) {}
 
     void emit_code(rv::Compiler *c) override {
         // TODO
@@ -170,8 +154,5 @@ public:
 
 LEAF(BuiltinRead, Instruction) };
 LEAF(BuiltinWrite, Instruction) };
-LEAF(BuiltinLength, Instruction) };
-LEAF(BuiltinString, Instruction) };
-LEAF(BuiltinArray, Instruction) };
 
 }
