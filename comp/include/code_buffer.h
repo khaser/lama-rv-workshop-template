@@ -105,7 +105,7 @@ namespace lama::rv {
         }
 
         void emit_s_type(const std::string& insn, Register dst, Register base, int off) {
-            emit(insn + "\t" + dst.to_string() + ",\t" + base.to_string() + "(" + std::to_string(off) + ")");
+            emit(insn + "\t" + dst.to_string() + ",\t" + std::to_string(off) + "(" + base.to_string() + ")");
         }
 
         inline Register to_reg(SymbolicLocation loc, Register temp) {
